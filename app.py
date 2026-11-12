@@ -1,22 +1,18 @@
-"""CMMS backend - Step 1: database, login, roles, users, drop-down options.
-Run:  pip install flask waitress
-      python app.py            (dev)   |   waitress-serve --port=5000 app:app   (production)
+"""CMMS backend.
+Run:  pip install -r requirements.txt
+      SECRET_KEY=... python app.py     (listens on 127.0.0.1:$PORT, default 8100; put nginx in front)
 """
-import os, secrets, sqlite3
+import os, secrets, sys, sqlite3
 from functools import wraps
 from flask import Flask, g, jsonify, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE, "cmms.db")
-KEY_PATH = os.path.join(BASE, ".secret_key")
 DEFAULT_PASSWORD = "changeme123"
 
 app = Flask(__name__)
-if not os.path.exists(KEY_PATH):
-    with open(KEY_PATH, "w") as f:
-        f.write(secrets.token_hex(32))
-app.secret_key = open(KEY_PATH).read()
+app.secret_key = os.environ.get("SECRET_KEY") or sys.exit("SECRET_KEY environment variable is not set")
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
                   PERMANENT_SESSION_LIFETIME=60 * 60 * 12)
 
@@ -1958,4 +1954,5 @@ def index():
 init_db()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    from waitress import serve
+    serve(app, host="127.0.0.1", port=int(os.environ.get("PORT", "8100")))
