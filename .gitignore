@@ -1,0 +1,12 @@
+.env
+*.db
+token.json
+credentials.json
+secrets*
+*.pem
+*.key
+__pycache__/
+*.pyc
+uploads/
+reports/
+.secret_key
