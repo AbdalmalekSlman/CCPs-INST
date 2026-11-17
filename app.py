@@ -2,7 +2,7 @@
 Run:  pip install -r requirements.txt
       SECRET_KEY=... python app.py     (listens on 127.0.0.1:$PORT, default 8100; put nginx in front)
 """
-import os, secrets, sys, sqlite3
+import os, secrets, sys, sqlite3, time
 from functools import wraps
 from flask import Flask, g, jsonify, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -14,7 +14,8 @@ DEFAULT_PASSWORD = "changeme123"
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or sys.exit("SECRET_KEY environment variable is not set")
 app.config.update(SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
-                  PERMANENT_SESSION_LIFETIME=60 * 60 * 12)
+                  PERMANENT_SESSION_LIFETIME=60 * 60 * 24 * 30)  # "keep me logged in"
+SHORT_SESSION = 60 * 60 * 12   # normal login lasts 12 h
 
 # ---------- database ----------
 def db():
@@ -281,7 +282,7 @@ def public_user(r):
 
 def current_user():
     uid = session.get("uid")
-    if not uid:
+    if not uid or session.get("exp", float("inf")) < time.time():
         return None
     r = db().execute("SELECT * FROM users WHERE id=? AND active=1", (uid,)).fetchone()
     return r
@@ -319,6 +320,8 @@ def login():
     session.clear()
     session.permanent = True
     session["uid"] = r["id"]
+    if not j.get("remember"):
+        session["exp"] = time.time() + SHORT_SESSION
     return jsonify(user=public_user(r))
 
 @app.post("/api/logout")
