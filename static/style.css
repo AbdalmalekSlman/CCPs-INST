@@ -17,10 +17,14 @@ input,select,textarea{width:100%;padding:.55em .7em;border:1px solid var(--line)
 .err{color:var(--bad);min-height:1.3em;margin:.6em 0 0}
 
 /* login */
-.login{min-height:100%;display:grid;place-items:center;padding:1rem}
-.login form{width:100%;max-width:360px;background:var(--card);padding:1.6rem;border-radius:var(--r);border-top:4px solid var(--sig)}
+.login{min-height:100vh;display:grid;place-items:center;padding:1rem;background:linear-gradient(rgba(10,22,32,.45),rgba(10,22,32,.7)),url(/static/login-bg.jpg) center/cover no-repeat fixed}
+.login form{width:100%;max-width:380px;background:rgba(255,255,255,.96);padding:2rem 1.8rem;border-radius:10px;border-top:4px solid var(--sig);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.login .brand{margin:0 0 .3rem;color:var(--sig);font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.login h1{font-size:1.9rem;letter-spacing:.04em}
 .login .sub{color:var(--mute);margin:0 0 1rem}
-.login .btn{width:100%;margin-top:1rem}
+.login .keep{display:flex;align-items:center;gap:.5rem;font-weight:400;margin:1rem 0 0;cursor:pointer}
+.login .keep input{width:auto;margin:0}
+.login .btn{width:100%;margin-top:1rem;padding:.7em 1em;font-weight:600}
 
 /* shell */
 .shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}

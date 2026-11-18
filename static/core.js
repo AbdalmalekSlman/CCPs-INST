@@ -51,12 +51,15 @@ function showLogin() {
   const msg = h("p", { class: "err", role: "alert" });
   const u = h("input", { id: "u", autocomplete: "username", autocapitalize: "none", required: true });
   const p = h("input", { id: "p", type: "password", autocomplete: "current-password", required: true });
+  const keep = h("input", { id: "keep", type: "checkbox" });
   const f = h("form", { onsubmit: async e => {
     e.preventDefault(); msg.textContent = "";
-    try { App.user = (await api("POST", "/api/login", { username: u.value, password: p.value })).user; start(); }
+    try { App.user = (await api("POST", "/api/login", { username: u.value, password: p.value, remember: keep.checked })).user; start(); }
     catch (x) { msg.textContent = x.message; }
-  } }, h("h1", {}, "CMMS"), h("p", { class: "sub" }, "CCPs Instrument department"),
+  } }, h("p", { class: "brand" }, "CCPs Instrument department"), h("h1", {}, "CMMS"),
+    h("p", { class: "sub" }, "Maintenance management system"),
     h("label", { for: "u" }, "Username"), u, h("label", { for: "p" }, "Password"), p,
+    h("label", { class: "keep", for: "keep" }, keep, "Keep me logged in"),
     msg, h("button", { class: "btn" }, "Sign in"));
   $("#app").replaceChildren(h("div", { class: "login" }, f));
   u.focus();
