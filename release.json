@@ -1,0 +1,9 @@
+{
+  "revision": "bfa8a9d6f21661a6e050c5858646a71679eb513b",
+  "platform": "linux",
+  "arch": "x64",
+  "node": "v24.22.3",
+  "target": "staging",
+  "supabaseUrl": "https://dmrmqrtjmpeyoekicctp.supabase.co",
+  "publicKeySha256": "7ae7daa9d175bf15e901e7f444c0a8ec87911d4cdef7bab437e55938e1f96e93"
+}
